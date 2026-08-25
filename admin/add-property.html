@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Add Property | Grover Properties</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+
+</head>
+
+<body class="admin-body">
+
+
+<header class="admin-navbar">
+
+    <div class="container admin-nav-inner">
+
+        <strong>
+            Grover Properties — Admin
+        </strong>
+
+        <a
+            class="btn btn-gold"
+            href="dashboard.html"
+        >
+            Dashboard
+        </a>
+
+    </div>
+
+</header>
+
+
+<main class="admin-content">
+
+<div class="container">
+
+<div class="admin-card">
+
+    <h1>
+        Add Property
+    </h1>
+
+    <p
+        style="
+        color:#64748b;
+        margin:8px 0 25px;
+        "
+    >
+        Add a new property listing.
+    </p>
+
+
+    <form id="propertyForm">
+
+        <div class="form-grid">
+
+
+            <div class="form-group form-full">
+
+                <label>
+                    Property Title *
+                </label>
+
+                <input
+                    class="input"
+                    name="title"
+                    required
+                    placeholder="e.g. 3 BHK Independent House"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Property Type *
+                </label>
+
+                <select
+                    class="select"
+                    name="property_type"
+                    required
+                >
+
+                    <option value="">
+                        Select type
+                    </option>
+
+                    <option>
+                        Residential
+                    </option>
+
+                    <option>
+                        Commercial
+                    </option>
+
+                    <option>
+                        Plot
+                    </option>
+
+                    <option>
+                        Land
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Listing Type *
+                </label>
+
+                <select
+                    class="select"
+                    name="listing_type"
+                    required
+                >
+
+                    <option value="Sale">
+                        For Sale
+                    </option>
+
+                    <option value="Rent">
+                        For Rent
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Price *
+                </label>
+
+                <input
+                    class="input"
+                    type="number"
+                    name="price"
+                    required
+                    min="0"
+                    placeholder="6500000"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Location *
+                </label>
+
+                <input
+                    class="input"
+                    name="location"
+                    required
+                    placeholder="Vasant Vihar, Karnal"
+                >
+
+            </div>
+
+
+            <div class="form-group form-full">
+
+                <label>
+                    Full Address
+                </label>
+
+                <input
+                    class="input"
+                    name="address"
+                    placeholder="Full property address"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Area
+                </label>
+
+                <input
+                    class="input"
+                    type="number"
+                    name="area"
+                    placeholder="1800"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Area Unit
+                </label>
+
+                <select
+                    class="select"
+                    name="area_unit"
+                >
+
+                    <option>
+                        sq.ft
+                    </option>
+
+                    <option>
+                        sq.yd
+                    </option>
+
+                    <option>
+                        acre
+                    </option>
+
+                    <option>
+                        marla
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Bedrooms
+                </label>
+
+                <input
+                    class="input"
+                    type="number"
+                    name="bedrooms"
+                    min="0"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Bathrooms
+                </label>
+
+                <input
+                    class="input"
+                    type="number"
+                    name="bathrooms"
+                    min="0"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Furnishing
+                </label>
+
+                <input
+                    class="input"
+                    name="furnishing"
+                    placeholder="Fully Furnished"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Parking
+                </label>
+
+                <input
+                    class="input"
+                    name="parking"
+                    placeholder="2 Car Parking"
+                >
+
+            </div>
+
+
+            <div class="form-group form-full">
+
+                <label>
+                    Features
+                </label>
+
+                <input
+                    class="input"
+                    name="features"
+                    placeholder="Road facing, Balcony, Garden, Corner plot"
+                >
+
+                <small style="color:#64748b">
+                    Separate features with commas.
+                </small>
+
+            </div>
+
+
+            <div class="form-group form-full">
+
+                <label>
+                    Description *
+                </label>
+
+                <textarea
+                    class="textarea"
+                    name="description"
+                    required
+                    placeholder="Describe the property..."
+                ></textarea>
+
+            </div>
+
+
+            <div class="form-group form-full">
+
+                <label>
+                    Property Images
+                </label>
+
+                <input
+                    class="input"
+                    id="images"
+                    type="file"
+                    accept="image/*"
+                    multiple
+                >
+
+                <small style="color:#64748b">
+                    Select multiple images.
+                </small>
+
+                <div
+                    class="image-preview"
+                    id="imagePreview"
+                ></div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Owner Name
+                </label>
+
+                <input
+                    class="input"
+                    name="owner_name"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Owner Phone
+                </label>
+
+                <input
+                    class="input"
+                    name="owner_phone"
+                    type="tel"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Status
+                </label>
+
+                <select
+                    class="select"
+                    name="status"
+                >
+
+                    <option>
+                        Available
+                    </option>
+
+                    <option>
+                        Sold
+                    </option>
+
+                    <option>
+                        Rented
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Featured
+                </label>
+
+                <select
+                    class="select"
+                    name="featured"
+                >
+
+                    <option value="false">
+                        No
+                    </option>
+
+                    <option value="true">
+                        Yes
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-full">
+
+                <button
+                    class="btn btn-primary"
+                    type="submit"
+                >
+                    Publish Property
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+    <p
+        id="formMessage"
+        style="margin-top:15px"
+    ></p>
+
+</div>
+
+</div>
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="../js/supabase.js"></script>
+<script src="../js/main.js"></script>
+
+
+<script>
+
+let selectedFiles = [];
+
+const imageInput =
+    document.getElementById("images");
+
+const preview =
+    document.getElementById("imagePreview");
+
+imageInput.addEventListener("change", () => {
+
+    selectedFiles =
+        Array.from(imageInput.files);
+
+    preview.innerHTML = "";
+
+    selectedFiles.forEach(file => {
+
+        const reader =
+            new FileReader();
+
+        reader.onload = e => {
+
+            preview.innerHTML += `
+                <img src="${e.target.result}">
+            `;
+
+        };
+
+        reader.readAsDataURL(file);
+
+    });
+
+});
+
+
+async function uploadImages(propertyId) {
+
+    const urls = [];
+
+    for (const file of selectedFiles) {
+
+        const extension =
+            file.name.split(".").pop();
+
+        const filename =
+            `${propertyId}/${crypto.randomUUID()}.${extension}`;
+
+        const { error } =
+            await supabaseClient
+                .storage
+                .from("property-images")
+                .upload(filename, file, {
+                    cacheControl: "3600",
+                    upsert: false
+                });
+
+        if (error)
+            throw error;
+
+        const { data } =
+            supabaseClient
+                .storage
+                .from("property-images")
+                .getPublicUrl(filename);
+
+        urls.push(data.publicUrl);
+    }
+
+    return urls;
+}
+
+
+document
+    .getElementById("propertyForm")
+    .addEventListener("submit", async e => {
+
+        e.preventDefault();
+
+        const form =
+            e.target;
+
+        const message =
+            document.getElementById("formMessage");
+
+        const button =
+            form.querySelector("button[type='submit']");
+
+        button.disabled = true;
+        button.textContent = "Publishing...";
+
+        try {
+
+            const {
+                data: {
+                    user
+                }
+            } =
+                await supabaseClient.auth.getUser();
+
+            if (!user)
+                throw new Error("Please login again.");
+
+            const fd =
+                new FormData(form);
+
+            const { data: property, error } =
+                await supabaseClient
+                    .from("properties")
+                    .insert({
+                        title: fd.get("title"),
+                        description: fd.get("description"),
+                        property_type: fd.get("property_type"),
+                        listing_type: fd.get("listing_type"),
+                        price: Number(fd.get("price")),
+                        location: fd.get("location"),
+                        address: fd.get("address") || "",
+                        area: fd.get("area")
+                            ? Number(fd.get("area"))
+                            : null,
+                        area_unit: fd.get("area_unit"),
+                        bedrooms: fd.get("bedrooms")
+                            ? Number(fd.get("bedrooms"))
+                            : null,
+                        bathrooms: fd.get("bathrooms")
+                            ? Number(fd.get("bathrooms"))
+                            : null,
+                        furnishing: fd.get("furnishing") || "",
+                        parking: fd.get("parking") || "",
+                        features:
+                            (fd.get("features") || "")
+                            .split(",")
+                            .map(x => x.trim())
+                            .filter(Boolean),
+                        owner_name:
+                            fd.get("owner_name") || "",
+                        owner_phone:
+                            fd.get("owner_phone") || "",
+                        status: fd.get("status"),
+                        featured:
+                            fd.get("featured") === "true",
+                        created_by: user.id
+                    })
+                    .select()
+                    .single();
+
+            if (error)
+                throw error;
+
+            const urls =
+                await uploadImages(property.id);
+
+            const { error: updateError } =
+                await supabaseClient
+                    .from("properties")
+                    .update({
+                        images: urls
+                    })
+                    .eq("id", property.id);
+
+            if (updateError)
+                throw updateError;
+
+            message.style.color =
+                "#15803d";
+
+            message.textContent =
+                "Property published successfully.";
+
+            form.reset();
+
+            preview.innerHTML = "";
+
+            selectedFiles = [];
+
+        } catch (error) {
+
+            console.error(error);
+
+            message.style.color =
+                "#dc2626";
+
+            message.textContent =
+                error.message ||
+                "Something went wrong.";
+
+        } finally {
+
+            button.disabled = false;
+            button.textContent = "Publish Property";
+
+        }
+
+    });
+
+</script>
+
+</body>
+</html>
