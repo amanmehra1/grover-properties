@@ -1,0 +1,15 @@
+.properties-page {
+    min-height: 500px;
+}
+
+.results-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.results-count {
+    color: var(--muted);
+    font-size: 14px;
+}
