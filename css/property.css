@@ -1,0 +1,27 @@
+.property-description {
+    margin-top: 40px;
+}
+
+.property-description h2 {
+    font-family: "Playfair Display", serif;
+    font-size: 32px;
+    margin-bottom: 15px;
+}
+
+.property-description p {
+    color: var(--muted);
+    white-space: pre-line;
+}
+
+.feature-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.feature-item {
+    background: var(--light);
+    padding: 12px 15px;
+    border-radius: 6px;
+}

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Dashboard | Grover Properties</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+
+</head>
+
+<body class="admin-body">
+
+
+<header class="admin-navbar">
+
+    <div class="container admin-nav-inner">
+
+        <strong>
+            Grover Properties — Admin
+        </strong>
+
+        <button
+            class="btn btn-gold"
+            id="logoutBtn"
+        >
+            Logout
+        </button>
+
+    </div>
+
+</header>
+
+
+<div class="admin-layout">
+
+
+<aside class="admin-sidebar">
+
+    <a href="dashboard.html">
+        Dashboard
+    </a>
+
+    <a href="add-property.html">
+        + Add Property
+    </a>
+
+    <a href="../index.html" target="_blank">
+        View Website
+    </a>
+
+</aside>
+
+
+<main class="admin-content">
+
+    <h1>
+        Dashboard
+    </h1>
+
+    <p style="color:#64748b;margin:8px 0 25px">
+        Manage Grover Properties listings and enquiries.
+    </p>
+
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+
+            <span>
+                Total Properties
+            </span>
+
+            <strong id="totalProperties">
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span>
+                Available
+            </span>
+
+            <strong id="availableProperties">
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span>
+                Sold / Rented
+            </span>
+
+            <strong id="soldProperties">
+                -
+            </strong>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span>
+                Sell Enquiries
+            </span>
+
+            <strong id="sellEnquiries">
+                -
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <div class="admin-card">
+
+        <div
+            style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:20px;
+            "
+        >
+
+            <h2>
+                Properties
+            </h2>
+
+            <a
+                class="btn btn-primary"
+                href="add-property.html"
+            >
+                + Add Property
+            </a>
+
+        </div>
+
+
+        <div class="admin-table-wrapper">
+
+            <table class="admin-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Property</th>
+                        <th>Type</th>
+                        <th>Location</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="propertyTable">
+
+                    <tr>
+                        <td colspan="6">
+                            Loading...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="admin-card"
+        style="margin-top:25px"
+    >
+
+        <h2 style="margin-bottom:20px">
+            Recent Sell Enquiries
+        </h2>
+
+        <div class="admin-table-wrapper">
+
+            <table class="admin-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Location</th>
+                        <th>Expected Price</th>
+                        <th>Date</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="enquiryTable">
+
+                    <tr>
+                        <td colspan="5">
+                            Loading...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</main>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="../js/supabase.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/admin.js"></script>
+
+</body>
+</html>
