@@ -94,7 +94,7 @@ async function initAdmin() {
             return;
         }
 
-
+         document.body.style.visibility = "visible";
         /*
          * Everything is OK.
          */
