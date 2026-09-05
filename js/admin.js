@@ -16,6 +16,7 @@ document.addEventListener(
 let allProperties = [];
 let allSellEnquiries = [];
 let allContactEnquiries = [];
+let allCustomerInterests = [];
 
 
 /* =========================================================
@@ -278,6 +279,40 @@ function setupEvents() {
 
     }
 
+
+    /* Customer interest filters */
+
+    const interestSearch =
+        document.getElementById(
+            "interestSearch"
+        );
+
+
+    const interestStatusFilter =
+        document.getElementById(
+            "interestStatusFilter"
+        );
+
+
+    if (interestSearch) {
+
+        interestSearch.addEventListener(
+            "input",
+            filterCustomerInterests
+        );
+
+    }
+
+
+    if (interestStatusFilter) {
+
+        interestStatusFilter.addEventListener(
+            "change",
+            filterCustomerInterests
+        );
+
+    }
+
 }
 
 
@@ -447,6 +482,52 @@ async function loadDashboard() {
         );
 
 
+        /* =================================================
+           CUSTOMER INTERESTS
+        ================================================= */
+
+        const {
+            data: customerInterests,
+            error: interestError
+        } =
+            await supabaseClient
+                .from("customer_interests")
+                .select("*")
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
+
+
+        if (interestError)
+            throw interestError;
+
+
+        allCustomerInterests =
+            customerInterests || [];
+
+
+        const interestElement =
+            document.getElementById(
+                "interestLeads"
+            );
+
+
+        if (interestElement) {
+
+            interestElement.textContent =
+                allCustomerInterests.length;
+
+        }
+
+
+        renderCustomerInterests(
+            allCustomerInterests
+        );
+
+
 
         /* =================================================
            NEW LEADS
@@ -469,7 +550,12 @@ async function loadDashboard() {
         document.getElementById(
             "newEnquiries"
         ).textContent =
-            newSell + newContact;
+            newSell +
+            newContact +
+            allCustomerInterests.filter(
+                interest =>
+                    interest.status === "New"
+            ).length;
 
 
         showMessage(
@@ -1374,8 +1460,6 @@ function attachContactActions() {
         );
 
 }
-
-
 /* =========================================================
    UPDATE ENQUIRY STATUS
 ========================================================= */
@@ -1656,6 +1740,491 @@ function filterContactEnquiries() {
 
 
 /* =========================================================
+   CUSTOMER INTERESTS
+========================================================= */
+
+function renderCustomerInterests(
+    interests
+) {
+
+    const tbody =
+        document.getElementById(
+            "interestTable"
+        );
+
+
+    if (!tbody)
+        return;
+
+
+    if (!interests.length) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="9">
+                    No customer interests yet.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    tbody.innerHTML =
+        interests.map(
+            interest => {
+
+                return `
+
+                    <tr>
+
+                        <td>
+                            <strong>
+                                ${escapeHtml(
+                                    interest.customer_name || "—"
+                                )}
+                            </strong>
+                        </td>
+
+
+                        <td>
+
+                            ${
+                                interest.customer_phone
+
+                                ? `
+                                    <a
+                                        href="tel:${escapeHtml(
+                                            interest.customer_phone
+                                        )}"
+                                    >
+                                        ${escapeHtml(
+                                            interest.customer_phone
+                                        )}
+                                    </a>
+                                  `
+
+                                : "—"
+                            }
+
+                        </td>
+
+
+                        <td>
+
+                            ${
+                                interest.customer_email
+
+                                ? `
+                                    <a
+                                        href="mailto:${escapeHtml(
+                                            interest.customer_email
+                                        )}"
+                                    >
+                                        ${escapeHtml(
+                                            interest.customer_email
+                                        )}
+                                    </a>
+                                  `
+
+                                : "—"
+                            }
+
+                        </td>
+
+
+                        <td>
+                            <strong>
+                                ${escapeHtml(
+                                    interest.property_title || "—"
+                                )}
+                            </strong>
+                        </td>
+
+
+                        <td>
+                            ${escapeHtml(
+                                interest.property_location || "—"
+                            )}
+                        </td>
+
+
+                        <td>
+                            ${formatPrice(
+                                interest.property_price
+                            )}
+                        </td>
+
+
+                        <td>
+                            ${interestStatusSelect(
+                                interest.id,
+                                interest.status
+                            )}
+                        </td>
+
+
+                        <td>
+                            ${formatDate(
+                                interest.created_at
+                            )}
+                        </td>
+
+
+                        <td>
+
+                            <div class="admin-actions">
+
+                                ${callButton(
+                                    interest.customer_phone
+                                )}
+
+                                ${
+                                    interest.customer_email
+                                    ? emailButton(
+                                        interest.customer_email
+                                    )
+                                    : ""
+                                }
+
+                                <button
+                                    type="button"
+                                    class="delete-btn"
+                                    data-interest-delete="${escapeHtml(
+                                        interest.id
+                                    )}"
+                                >
+                                    Delete
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+        ).join("");
+
+
+    attachInterestActions();
+
+}
+
+
+/* =========================================================
+   CUSTOMER INTEREST STATUS SELECT
+========================================================= */
+
+function interestStatusSelect(
+    id,
+    status
+) {
+
+    const statuses = [
+        "New",
+        "Contacted",
+        "Site Visit Scheduled",
+        "Negotiation",
+        "Booked",
+        "Closed",
+        "Not Interested"
+    ];
+
+
+    return `
+
+        <select
+            class="enquiry-status-select ${getStatusClass(
+                status
+            )}"
+            data-interest-status="${escapeHtml(
+                id
+            )}"
+        >
+
+            ${statuses.map(
+                currentStatus => `
+
+                    <option
+                        value="${escapeHtml(
+                            currentStatus
+                        )}"
+                        ${
+                            status === currentStatus
+                            ? "selected"
+                            : ""
+                        }
+                    >
+                        ${escapeHtml(
+                            currentStatus
+                        )}
+                    </option>
+
+                `
+            ).join("")}
+
+        </select>
+
+    `;
+
+}
+
+
+/* =========================================================
+   CUSTOMER INTEREST ACTIONS
+========================================================= */
+
+function attachInterestActions() {
+
+
+    document
+        .querySelectorAll(
+            "[data-interest-status]"
+        )
+        .forEach(
+            select => {
+
+                if (
+                    select.dataset.bound === "true"
+                )
+                    return;
+
+
+                select.dataset.bound = "true";
+
+
+                select.addEventListener(
+                    "change",
+                    () => {
+
+                        updateCustomerInterestStatus(
+                            select.dataset.interestStatus,
+                            select.value
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    document
+        .querySelectorAll(
+            "[data-interest-delete]"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        deleteCustomerInterest(
+                            button.dataset.interestDelete
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   UPDATE CUSTOMER INTEREST STATUS
+========================================================= */
+
+async function updateCustomerInterestStatus(
+    id,
+    status
+) {
+
+    try {
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from("customer_interests")
+                .update({
+                    status: status
+                })
+                .eq(
+                    "id",
+                    id
+                );
+
+
+        if (error)
+            throw error;
+
+
+        const interest =
+            allCustomerInterests.find(
+                item =>
+                    item.id === id
+            );
+
+
+        if (interest)
+            interest.status = status;
+
+
+        updateNewLeadCount();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Interest status update error:",
+            error
+        );
+
+
+        alert(
+            "Unable to update interest status: " +
+            error.message
+        );
+
+
+        await loadDashboard();
+
+    }
+
+}
+
+
+/* =========================================================
+   DELETE CUSTOMER INTEREST
+========================================================= */
+
+async function deleteCustomerInterest(
+    id
+) {
+
+    const confirmed =
+        confirm(
+            "Delete this customer interest permanently?"
+        );
+
+
+    if (!confirmed)
+        return;
+
+
+    try {
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from("customer_interests")
+                .delete()
+                .eq(
+                    "id",
+                    id
+                );
+
+
+        if (error)
+            throw error;
+
+
+        await loadDashboard();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Delete interest error:",
+            error
+        );
+
+
+        alert(
+            "Unable to delete customer interest: " +
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SEARCH CUSTOMER INTERESTS
+========================================================= */
+
+function filterCustomerInterests() {
+
+    const search =
+        (
+            document.getElementById(
+                "interestSearch"
+            )?.value || ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+    const status =
+        document.getElementById(
+            "interestStatusFilter"
+        )?.value || "all";
+
+
+    const filtered =
+        allCustomerInterests.filter(
+            interest => {
+
+
+                const searchable =
+                    [
+                        interest.customer_name,
+                        interest.customer_phone,
+                        interest.customer_email,
+                        interest.property_title,
+                        interest.property_location
+                    ]
+                    .filter(Boolean)
+                    .join(" ")
+                    .toLowerCase();
+
+
+                return (
+                    (!search ||
+                        searchable.includes(
+                            search
+                        )
+                    ) &&
+
+                    (
+                        status === "all" ||
+                        interest.status === status
+                    )
+                );
+
+            }
+        );
+
+
+    renderCustomerInterests(
+        filtered
+    );
+
+}
+
+
+/* =========================================================
    PROPERTY EDIT
 ========================================================= */
 
@@ -1723,8 +2292,6 @@ async function deleteProperty(id) {
     }
 
 }
-
-
 /* =========================================================
    CALL BUTTON
 ========================================================= */
@@ -1853,6 +2420,13 @@ function updateNewLeadCount() {
         ).length;
 
 
+    const newInterests =
+        allCustomerInterests.filter(
+            interest =>
+                interest.status === "New"
+        ).length;
+
+
     const element =
         document.getElementById(
             "newEnquiries"
@@ -1862,7 +2436,9 @@ function updateNewLeadCount() {
     if (element) {
 
         element.textContent =
-            newSell + newContact;
+            newSell +
+            newContact +
+            newInterests;
 
     }
 
@@ -1971,26 +2547,26 @@ function escapeHtml(
     return String(
         value ?? ""
     )
-        .replaceAll(
-            "&",
-            "&amp;"
-        )
-        .replaceAll(
-            "<",
-            "&lt;"
-        )
-        .replaceAll(
-            ">",
-            "&gt;"
-        )
-        .replaceAll(
-            '"',
-            "&quot;"
-        )
-        .replaceAll(
-            "'",
-            "&#039;"
-        );
+    .replaceAll(
+        "&",
+        "&amp;"
+    )
+    .replaceAll(
+        "<",
+        "&lt;"
+    )
+    .replaceAll(
+        ">",
+        "&gt;"
+    )
+    .replaceAll(
+        '"',
+        "&quot;"
+    )
+    .replaceAll(
+        "'",
+        "&#039;"
+    );
 
 }
 
