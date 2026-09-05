@@ -10,237 +10,676 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Dashboard | Grover Properties</title>
+    <meta
+        name="robots"
+        content="noindex, nofollow, noarchive"
+    >
+
+    <title>Admin Dashboard | Grover Properties</title>
 
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/admin.css">
 
 </head>
 
+
 <body class="admin-body">
 
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
 
 <header class="admin-navbar">
 
     <div class="container admin-nav-inner">
 
-        <strong>
-            Grover Properties — Admin
-        </strong>
+        <div class="admin-brand">
 
-        <button
-            class="btn btn-gold"
-            id="logoutBtn"
-        >
-            Logout
-        </button>
+            <strong>
+                Grover Properties
+            </strong>
+
+            <span>
+                ADMIN PANEL
+            </span>
+
+        </div>
+
+
+        <div class="admin-nav-actions">
+
+            <a
+                href="../index.html"
+                target="_blank"
+                class="btn btn-gold"
+            >
+                View Website
+            </a>
+
+
+            <button
+                type="button"
+                class="btn btn-danger-outline"
+                id="logoutBtn"
+            >
+                Logout
+            </button>
+
+        </div>
 
     </div>
 
 </header>
 
 
+
+<!-- =====================================================
+     LAYOUT
+===================================================== -->
+
 <div class="admin-layout">
 
 
-<aside class="admin-sidebar">
+    <!-- SIDEBAR -->
 
-    <a href="dashboard.html">
-        Dashboard
-    </a>
+    <aside class="admin-sidebar">
 
-    <a href="add-property.html">
-        + Add Property
-    </a>
-
-    <a href="../index.html" target="_blank">
-        View Website
-    </a>
-
-</aside>
-
-
-<main class="admin-content">
-
-    <h1>
-        Dashboard
-    </h1>
-
-    <p style="color:#64748b;margin:8px 0 25px">
-        Manage Grover Properties listings and enquiries.
-    </p>
-
-
-    <div class="stats-grid">
-
-        <div class="stat-card">
-
-            <span>
-                Total Properties
-            </span>
-
-            <strong id="totalProperties">
-                -
-            </strong>
-
-        </div>
-
-
-        <div class="stat-card">
-
-            <span>
-                Available
-            </span>
-
-            <strong id="availableProperties">
-                -
-            </strong>
-
-        </div>
-
-
-        <div class="stat-card">
-
-            <span>
-                Sold / Rented
-            </span>
-
-            <strong id="soldProperties">
-                -
-            </strong>
-
-        </div>
-
-
-        <div class="stat-card">
-
-            <span>
-                Sell Enquiries
-            </span>
-
-            <strong id="sellEnquiries">
-                -
-            </strong>
-
-        </div>
-
-    </div>
-
-
-    <div class="admin-card">
-
-        <div
-            style="
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            margin-bottom:20px;
-            "
+        <a
+            href="dashboard.html"
+            class="active"
         >
+            📊 Dashboard
+        </a>
 
-            <h2>
-                Properties
-            </h2>
 
-            <a
+        <a href="add-property.html">
+            ➕ Add Property
+        </a>
+
+
+        <a
+            href="../properties.html"
+            target="_blank"
+        >
+            🏠 View Properties
+        </a>
+
+
+        <a
+            href="../index.html"
+            target="_blank"
+        >
+            🌐 Website
+        </a>
+
+    </aside>
+
+
+
+    <!-- MAIN -->
+
+    <main class="admin-content">
+
+
+        <!-- PAGE HEADER -->
+
+        <div class="admin-page-header">
+
+            <div>
+
+                <h1>
+                    Dashboard
+                </h1>
+
+                <p>
+                    Manage Grover Properties listings and enquiries.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
                 class="btn btn-primary"
-                href="add-property.html"
+                id="refreshBtn"
             >
-                + Add Property
-            </a>
+                ↻ Refresh
+            </button>
 
         </div>
 
 
-        <div class="admin-table-wrapper">
 
-            <table class="admin-table">
+        <!-- =================================================
+             STATS
+        ================================================== -->
 
-                <thead>
-
-                    <tr>
-
-                        <th>Property</th>
-                        <th>Type</th>
-                        <th>Location</th>
-                        <th>Price</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody id="propertyTable">
-
-                    <tr>
-                        <td colspan="6">
-                            Loading...
-                        </td>
-                    </tr>
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
+        <section class="stats-grid">
 
 
-    <div
-        class="admin-card"
-        style="margin-top:25px"
-    >
+            <div class="stat-card">
 
-        <h2 style="margin-bottom:20px">
-            Recent Sell Enquiries
-        </h2>
+                <span>
+                    Total Properties
+                </span>
 
-        <div class="admin-table-wrapper">
+                <strong id="totalProperties">
+                    —
+                </strong>
 
-            <table class="admin-table">
+            </div>
 
-                <thead>
 
-                    <tr>
+            <div class="stat-card">
 
-                        <th>Name</th>
-                        <th>Phone</th>
-                        <th>Location</th>
-                        <th>Expected Price</th>
-                        <th>Date</th>
+                <span>
+                    Available
+                </span>
 
-                    </tr>
+                <strong id="availableProperties">
+                    —
+                </strong>
 
-                </thead>
+            </div>
 
-                <tbody id="enquiryTable">
 
-                    <tr>
-                        <td colspan="5">
-                            Loading...
-                        </td>
-                    </tr>
+            <div class="stat-card">
 
-                </tbody>
+                <span>
+                    Sold / Rented
+                </span>
 
-            </table>
+                <strong id="soldProperties">
+                    —
+                </strong>
 
-        </div>
+            </div>
 
-    </div>
 
-</main>
+            <div class="stat-card">
+
+                <span>
+                    Sell Enquiries
+                </span>
+
+                <strong id="sellEnquiries">
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    Contact Enquiries
+                </span>
+
+                <strong id="contactEnquiries">
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>
+                    New Leads
+                </span>
+
+                <strong id="newEnquiries">
+                    —
+                </strong>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             PROPERTY MANAGEMENT
+        ================================================== -->
+
+        <section class="admin-card">
+
+
+            <div class="admin-section-header">
+
+                <div>
+
+                    <h2>
+                        Properties
+                    </h2>
+
+                    <p>
+                        Manage your property listings.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="add-property.html"
+                    class="btn btn-primary"
+                >
+                    + Add Property
+                </a>
+
+            </div>
+
+
+
+            <div class="admin-filters">
+
+                <input
+                    type="search"
+                    id="propertySearch"
+                    class="input"
+                    placeholder="Search property or location..."
+                >
+
+
+                <select
+                    id="statusFilter"
+                    class="select"
+                >
+
+                    <option value="all">
+                        All Status
+                    </option>
+
+                    <option value="Available">
+                        Available
+                    </option>
+
+                    <option value="Sold">
+                        Sold
+                    </option>
+
+                    <option value="Rented">
+                        Rented
+                    </option>
+
+                </select>
+
+
+                <select
+                    id="typeFilter"
+                    class="select"
+                >
+
+                    <option value="all">
+                        All Types
+                    </option>
+
+                    <option value="Residential">
+                        Residential
+                    </option>
+
+                    <option value="Commercial">
+                        Commercial
+                    </option>
+
+                    <option value="Plot">
+                        Plot
+                    </option>
+
+                    <option value="Land">
+                        Land
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div
+                id="propertyMessage"
+                class="admin-message"
+            ></div>
+
+
+            <div class="admin-table-wrapper">
+
+                <table class="admin-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Property
+                            </th>
+
+                            <th>
+                                Type
+                            </th>
+
+                            <th>
+                                Location
+                            </th>
+
+                            <th>
+                                Price
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Featured
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="propertyTable">
+
+                        <tr>
+
+                            <td colspan="7">
+                                Loading properties...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             SELL PROPERTY ENQUIRIES
+        ================================================== -->
+
+        <section class="admin-card admin-section-gap">
+
+
+            <div class="admin-section-header">
+
+                <div>
+
+                    <h2>
+                        Sell Property Enquiries
+                    </h2>
+
+                    <p>
+                        People who want to sell their property.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- FILTERS -->
+
+            <div class="enquiry-toolbar">
+
+                <input
+                    type="search"
+                    id="sellSearch"
+                    class="input"
+                    placeholder="Search name, phone or location..."
+                >
+
+
+                <select
+                    id="sellStatusFilter"
+                    class="select"
+                >
+
+                    <option value="all">
+                        All Status
+                    </option>
+
+                    <option value="New">
+                        New
+                    </option>
+
+                    <option value="Contacted">
+                        Contacted
+                    </option>
+
+                    <option value="Closed">
+                        Closed
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <div class="admin-table-wrapper">
+
+                <table class="admin-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Name
+                            </th>
+
+                            <th>
+                                Phone
+                            </th>
+
+                            <th>
+                                Email
+                            </th>
+
+                            <th>
+                                Property
+                            </th>
+
+                            <th>
+                                Location
+                            </th>
+
+                            <th>
+                                Expected Price
+                            </th>
+
+                            <th>
+                                Message
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="enquiryTable">
+
+                        <tr>
+
+                            <td colspan="10">
+                                Loading enquiries...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             CONTACT ENQUIRIES
+        ================================================== -->
+
+        <section class="admin-card admin-section-gap">
+
+
+            <div class="admin-section-header">
+
+                <div>
+
+                    <h2>
+                        Contact Enquiries
+                    </h2>
+
+                    <p>
+                        Messages received through the website.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="enquiry-toolbar">
+
+                <input
+                    type="search"
+                    id="contactSearch"
+                    class="input"
+                    placeholder="Search name, phone or email..."
+                >
+
+
+                <select
+                    id="contactStatusFilter"
+                    class="select"
+                >
+
+                    <option value="all">
+                        All Status
+                    </option>
+
+                    <option value="New">
+                        New
+                    </option>
+
+                    <option value="Contacted">
+                        Contacted
+                    </option>
+
+                    <option value="Closed">
+                        Closed
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <div class="admin-table-wrapper">
+
+                <table class="admin-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Name
+                            </th>
+
+                            <th>
+                                Phone
+                            </th>
+
+                            <th>
+                                Email
+                            </th>
+
+                            <th>
+                                Message
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="contactTable">
+
+                        <tr>
+
+                            <td colspan="7">
+                                Loading contact enquiries...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+    </main>
 
 </div>
 
 
+
+<!-- =====================================================
+     SCRIPTS
+===================================================== -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="../js/supabase.js"></script>
-<script src="../js/main.js"></script>
+
 <script src="../js/admin.js"></script>
 
+
 </body>
+
 </html>
