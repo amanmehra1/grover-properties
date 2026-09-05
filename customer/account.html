@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Account | Grover Properties</title>
+
+    <meta
+        name="robots"
+        content="noindex, nofollow"
+    >
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+
+        body {
+            background: #f7f7f7;
+        }
+
+        .account-page {
+            padding: 50px 15px;
+            min-height: calc(100vh - 80px);
+        }
+
+        .account-container {
+            max-width: 1050px;
+            margin: auto;
+        }
+
+        .account-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .account-header h1 {
+            margin: 0 0 6px;
+        }
+
+        .account-header p {
+            margin: 0;
+            color: #666;
+        }
+
+        .account-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 22px;
+        }
+
+        .account-card {
+            background: #fff;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(0,0,0,.07);
+        }
+
+        .account-card h2 {
+            margin-top: 0;
+        }
+
+        .profile-row {
+            padding: 13px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .profile-row:last-child {
+            border-bottom: 0;
+        }
+
+        .profile-label {
+            display: block;
+            font-size: 12px;
+            color: #777;
+            margin-bottom: 4px;
+        }
+
+        .profile-value {
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 35px 15px;
+            color: #666;
+        }
+
+        .account-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .logout-btn {
+            border: 1px solid #dc2626;
+            background: transparent;
+            color: #dc2626;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .logout-btn:hover {
+            background: #fee2e2;
+        }
+
+        .website-btn {
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+
+        .login-required {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        @media (max-width: 750px) {
+
+            .account-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .account-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<main class="account-page">
+
+    <div class="account-container">
+
+
+        <!-- HEADER -->
+
+        <div class="account-header">
+
+            <div>
+
+                <h1>
+                    My Account
+                </h1>
+
+                <p id="welcomeText">
+                    Welcome to Grover Properties
+                </p>
+
+            </div>
+
+
+            <div class="account-actions">
+
+                <a
+                    href="../index.html"
+                    class="website-btn btn-primary"
+                >
+                    View Website
+                </a>
+
+
+                <button
+                    type="button"
+                    id="logoutBtn"
+                    class="logout-btn"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ACCOUNT CONTENT -->
+
+        <div
+            id="accountContent"
+            class="account-grid"
+        >
+
+
+            <!-- PROFILE -->
+
+            <section class="account-card">
+
+                <h2>
+                    My Profile
+                </h2>
+
+
+                <div class="profile-row">
+
+                    <span class="profile-label">
+                        Name
+                    </span>
+
+                    <span
+                        class="profile-value"
+                        id="profileName"
+                    >
+                        —
+                    </span>
+
+                </div>
+
+
+                <div class="profile-row">
+
+                    <span class="profile-label">
+                        Email
+                    </span>
+
+                    <span
+                        class="profile-value"
+                        id="profileEmail"
+                    >
+                        —
+                    </span>
+
+                </div>
+
+
+                <div class="profile-row">
+
+                    <span class="profile-label">
+                        Mobile
+                    </span>
+
+                    <span
+                        class="profile-value"
+                        id="profilePhone"
+                    >
+                        —
+                    </span>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- INTERESTS -->
+
+            <section class="account-card">
+
+                <h2>
+                    ❤️ My Interests
+                </h2>
+
+
+                <div class="empty-state">
+
+                    <p>
+                        You haven't shown interest in any property yet.
+                    </p>
+
+                    <a
+                        href="../properties.html"
+                        class="website-btn btn-primary"
+                    >
+                        Browse Properties
+                    </a>
+
+                </div>
+
+            </section>
+
+
+        </div>
+
+
+    </div>
+
+</main>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="../js/supabase.js"></script>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    initAccount
+);
+
+
+async function initAccount() {
+
+    try {
+
+        const {
+            data: {
+                user
+            }
+        } =
+            await supabaseClient.auth.getUser();
+
+
+        /*
+         * Not logged in.
+         */
+
+        if (!user) {
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+
+        const metadata =
+            user.user_metadata || {};
+
+
+        const name =
+            metadata.full_name ||
+            "Customer";
+
+
+        const phone =
+            metadata.phone ||
+            "Not provided";
+
+
+        const email =
+            user.email ||
+            "Not available";
+
+
+        document.getElementById(
+            "profileName"
+        ).textContent =
+            name;
+
+
+        document.getElementById(
+            "profileEmail"
+        ).textContent =
+            email;
+
+
+        document.getElementById(
+            "profilePhone"
+        ).textContent =
+            phone;
+
+
+        document.getElementById(
+            "welcomeText"
+        ).textContent =
+            `Welcome, ${name}`;
+
+
+        /*
+         * Logout
+         */
+
+        document
+            .getElementById(
+                "logoutBtn"
+            )
+            .addEventListener(
+                "click",
+                async () => {
+
+                    await supabaseClient.auth.signOut();
+
+                    window.location.href =
+                        "../index.html";
+
+                }
+            );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Account error:",
+            error
+        );
+
+        window.location.href =
+            "login.html";
+
+    }
+
+}
+
+</script>
+
+
+</body>
+
+</html>

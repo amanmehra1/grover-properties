@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Customer Login | Grover Properties</title>
+
+    <meta
+        name="robots"
+        content="noindex, nofollow"
+    >
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <style>
+
+        body {
+            min-height: 100vh;
+            background: #f7f7f7;
+        }
+
+        .auth-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 15px;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 430px;
+            background: #fff;
+            padding: 35px;
+            border-radius: 14px;
+            box-shadow: 0 10px 35px rgba(0,0,0,.10);
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .auth-logo h1 {
+            margin: 0 0 6px;
+        }
+
+        .auth-logo p {
+            margin: 0;
+            color: #666;
+        }
+
+        .auth-form {
+            display: grid;
+            gap: 16px;
+        }
+
+        .auth-form label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .auth-form input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 13px;
+            border: 1px solid #d5d5d5;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .auth-form input:focus {
+            outline: none;
+            border-color: #b58b45;
+        }
+
+        .auth-btn {
+            width: 100%;
+            border: 0;
+            cursor: pointer;
+            padding: 13px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .auth-message {
+            display: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .auth-message.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .auth-message.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 22px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .auth-footer a {
+            font-weight: 700;
+        }
+
+        .back-home {
+            display: block;
+            text-align: center;
+            margin-top: 18px;
+            color: #666;
+            text-decoration: none;
+        }
+
+        .forgot-link {
+            text-align: right;
+            margin-top: -8px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 500px) {
+
+            .auth-card {
+                padding: 25px 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="auth-page">
+
+    <div class="auth-card">
+
+
+        <div class="auth-logo">
+
+            <h1>
+                Grover Properties
+            </h1>
+
+            <p>
+                Customer Login
+            </p>
+
+        </div>
+
+
+        <form
+            id="loginForm"
+            class="auth-form"
+        >
+
+
+            <div>
+
+                <label for="email">
+                    Email Address
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email"
+                    autocomplete="email"
+                    required
+                >
+
+            </div>
+
+
+            <div>
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    required
+                >
+
+            </div>
+
+
+            <div class="forgot-link">
+
+                <a
+                    href="#"
+                    id="forgotPassword"
+                >
+                    Forgot password?
+                </a>
+
+            </div>
+
+
+            <div
+                id="loginMessage"
+                class="auth-message"
+            ></div>
+
+
+            <button
+                type="submit"
+                id="loginBtn"
+                class="auth-btn btn-primary"
+            >
+                Login
+            </button>
+
+
+        </form>
+
+
+        <div class="auth-footer">
+
+            Don't have an account?
+
+            <a href="signup.html">
+                Create Account
+            </a>
+
+        </div>
+
+
+        <a
+            href="../index.html"
+            class="back-home"
+        >
+            ← Continue browsing website
+        </a>
+
+
+    </div>
+
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="../js/supabase.js"></script>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async () => {
+
+
+        const {
+            data: {
+                user
+            }
+        } =
+            await supabaseClient.auth.getUser();
+
+
+        /*
+         * Already logged in.
+         */
+
+        if (user) {
+
+            window.location.href =
+                "account.html";
+
+            return;
+
+        }
+
+
+        const form =
+            document.getElementById(
+                "loginForm"
+            );
+
+
+        const button =
+            document.getElementById(
+                "loginBtn"
+            );
+
+
+        const message =
+            document.getElementById(
+                "loginMessage"
+            );
+
+
+        form.addEventListener(
+            "submit",
+            async (event) => {
+
+                event.preventDefault();
+
+
+                const email =
+                    document
+                        .getElementById("email")
+                        .value
+                        .trim();
+
+
+                const password =
+                    document
+                        .getElementById("password")
+                        .value;
+
+
+                button.disabled = true;
+
+                button.textContent =
+                    "Logging in...";
+
+
+                try {
+
+                    const {
+                        error
+                    } =
+                        await supabaseClient.auth.signInWithPassword({
+
+                            email:
+                                email,
+
+                            password:
+                                password
+
+                        });
+
+
+                    if (error)
+                        throw error;
+
+
+                    showMessage(
+                        "Login successful. Redirecting...",
+                        "success"
+                    );
+
+
+                    setTimeout(
+                        () => {
+
+                            window.location.href =
+                                "account.html";
+
+                        },
+                        700
+                    );
+
+                }
+
+                catch (error) {
+
+                    console.error(
+                        "Login error:",
+                        error
+                    );
+
+
+                    showMessage(
+                        error.message ||
+                        "Invalid email or password.",
+                        "error"
+                    );
+
+                }
+
+                finally {
+
+                    button.disabled = false;
+
+                    button.textContent =
+                        "Login";
+
+                }
+
+            }
+        );
+
+
+        /*
+         * Forgot password
+         */
+
+        document
+            .getElementById(
+                "forgotPassword"
+            )
+            .addEventListener(
+                "click",
+                async (event) => {
+
+                    event.preventDefault();
+
+
+                    const email =
+                        document
+                            .getElementById(
+                                "email"
+                            )
+                            .value
+                            .trim();
+
+
+                    if (!email) {
+
+                        showMessage(
+                            "Enter your email address first.",
+                            "error"
+                        );
+
+                        return;
+
+                    }
+
+
+                    try {
+
+                        const {
+                            error
+                        } =
+                            await supabaseClient.auth.resetPasswordForEmail(
+                                email,
+                                {
+                                    redirectTo:
+                                        `${window.location.origin}/customer/account.html`
+                                }
+                            );
+
+
+                        if (error)
+                            throw error;
+
+
+                        showMessage(
+                            "Password reset email sent. Please check your inbox.",
+                            "success"
+                        );
+
+                    }
+
+                    catch (error) {
+
+                        console.error(
+                            "Password reset error:",
+                            error
+                        );
+
+
+                        showMessage(
+                            error.message ||
+                            "Unable to send password reset email.",
+                            "error"
+                        );
+
+                    }
+
+                }
+            );
+
+
+        function showMessage(
+            text,
+            type
+        ) {
+
+            message.textContent =
+                text;
+
+            message.className =
+                `auth-message ${type}`;
+
+        }
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>
