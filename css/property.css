@@ -25,3 +25,57 @@
     padding: 12px 15px;
     border-radius: 6px;
 }
+/* =========================================================
+   I'M INTERESTED
+   ========================================================= */
+
+.btn-interest {
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    background: #b58b45;
+    color: #fff;
+    font-weight: 700;
+    transition: 0.2s ease;
+}
+
+.btn-interest:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.btn-interest:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.interest-message {
+    display: none;
+    margin-bottom: 14px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.interest-message.success,
+.interest-message.error,
+.interest-message.info {
+    display: block;
+}
+
+.interest-message.success {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.interest-message.error {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.interest-message.info {
+    background: #fef3c7;
+    color: #92400e;
+}
