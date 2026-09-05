@@ -272,245 +272,148 @@
 
 
 <script>
-
-document.addEventListener(
-    "DOMContentLoaded",
-    async () => {
-
-
-        const {
-            data: {
-                user
-            }
-        } =
-            await supabaseClient.auth.getUser();
-
-
-        /*
-         * Already logged in.
-         */
-
-        if (user) {
-
-            window.location.href =
-                "account.html";
-
-            return;
-
-        }
-
-
-        const form =
-            document.getElementById(
-                "loginForm"
-            );
-
-
-        const button =
-            document.getElementById(
-                "loginBtn"
-            );
-
-
-        const message =
-            document.getElementById(
-                "loginMessage"
-            );
-
-
-        form.addEventListener(
-            "submit",
-            async (event) => {
-
-                event.preventDefault();
-
-
-                const email =
-                    document
-                        .getElementById("email")
-                        .value
-                        .trim();
-
-
-                const password =
-                    document
-                        .getElementById("password")
-                        .value;
-
-
-                button.disabled = true;
-
-                button.textContent =
-                    "Logging in...";
-
-
-                try {
-
-                    const {
-                        error
-                    } =
-                        await supabaseClient.auth.signInWithPassword({
-
-                            email:
-                                email,
-
-                            password:
-                                password
-
-                        });
-
-
-                    if (error)
-                        throw error;
-
-
-                    showMessage(
-                        "Login successful. Redirecting...",
-                        "success"
-                    );
-
-
-                    setTimeout(
-                        () => {
-
-                            window.location.href =
-                                "account.html";
-
-                        },
-                        700
-                    );
-
-                }
-
-                catch (error) {
-
-                    console.error(
-                        "Login error:",
-                        error
-                    );
-
-
-                    showMessage(
-                        error.message ||
-                        "Invalid email or password.",
-                        "error"
-                    );
-
-                }
-
-                finally {
-
-                    button.disabled = false;
-
-                    button.textContent =
-                        "Login";
-
-                }
-
-            }
-        );
-
-
-        /*
-         * Forgot password
-         */
-
-        document
-            .getElementById(
-                "forgotPassword"
-            )
-            .addEventListener(
-                "click",
-                async (event) => {
-
-                    event.preventDefault();
-
-
-                    const email =
-                        document
-                            .getElementById(
-                                "email"
-                            )
-                            .value
-                            .trim();
-
-
-                    if (!email) {
-
-                        showMessage(
-                            "Enter your email address first.",
-                            "error"
-                        );
-
-                        return;
-
-                    }
-
-
-                    try {
-
-                        const {
-                            error
-                        } =
-                            await supabaseClient.auth.resetPasswordForEmail(
-                                email,
-                                {
-                                    redirectTo:
-                                        `${window.location.origin}/index.html`
-                                }
-                            );
-
-
-                        if (error)
-                            throw error;
-
-
-                        showMessage(
-                            "Password reset email sent. Please check your inbox.",
-                            "success"
-                        );
-
-                    }
-
-                    catch (error) {
-
-                        console.error(
-                            "Password reset error:",
-                            error
-                        );
-
-
-                        showMessage(
-                            error.message ||
-                            "Unable to send password reset email.",
-                            "error"
-                        );
-
-                    }
-
-                }
-            );
-
-
-        function showMessage(
-            text,
-            type
-        ) {
-
-            message.textContent =
-                text;
-
-            message.className =
-                `auth-message ${type}`;
-
-        }
-
+document.addEventListener("DOMContentLoaded", async () => {
+
+    const {
+        data: { user }
+    } = await supabaseClient.auth.getUser();
+
+    /*
+     * Already logged in:
+     * Go to main website instead of account page.
+     */
+    if (user) {
+        window.location.href = "../index.html";
+        return;
     }
-);
 
+    const form = document.getElementById("loginForm");
+    const button = document.getElementById("loginBtn");
+    const message = document.getElementById("loginMessage");
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const email = document
+            .getElementById("email")
+            .value
+            .trim();
+
+        const password = document
+            .getElementById("password")
+            .value;
+
+        button.disabled = true;
+        button.textContent = "Logging in...";
+
+        try {
+
+            const { error } =
+                await supabaseClient.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+            if (error) {
+                throw error;
+            }
+
+            showMessage(
+                "Login successful. Redirecting...",
+                "success"
+            );
+
+            /*
+             * After login:
+             * Go to main website.
+             */
+            setTimeout(() => {
+                window.location.href = "../index.html";
+            }, 700);
+
+        } catch (error) {
+
+            console.error("Login error:", error);
+
+            showMessage(
+                error.message ||
+                "Invalid email or password.",
+                "error"
+            );
+
+        } finally {
+
+            button.disabled = false;
+            button.textContent = "Login";
+        }
+    });
+
+
+    /*
+     * Forgot password
+     */
+    document
+        .getElementById("forgotPassword")
+        .addEventListener("click", async (event) => {
+
+            event.preventDefault();
+
+            const email = document
+                .getElementById("email")
+                .value
+                .trim();
+
+            if (!email) {
+
+                showMessage(
+                    "Enter your email address first.",
+                    "error"
+                );
+
+                return;
+            }
+
+            try {
+
+                const { error } =
+                    await supabaseClient.auth.resetPasswordForEmail(
+                        email,
+                        {
+                            redirectTo:
+                                `${window.location.origin}/index.html`
+                        }
+                    );
+
+                if (error) {
+                    throw error;
+                }
+
+                showMessage(
+                    "Password reset email sent. Please check your inbox.",
+                    "success"
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Password reset error:",
+                    error
+                );
+
+                showMessage(
+                    error.message ||
+                    "Unable to send password reset email.",
+                    "error"
+                );
+            }
+        });
+
+
+    function showMessage(text, type) {
+
+        message.textContent = text;
+        message.className = `auth-message ${type}`;
+    }
+
+});
 </script>
-
-
-</body>
-
-</html>
