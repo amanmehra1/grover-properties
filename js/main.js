@@ -219,3 +219,62 @@ function escapeHtml(value) {
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
 }
+/* =========================================================
+   CUSTOMER PROFILE NAVIGATION
+========================================================= */
+
+async function updateCustomerProfileLink() {
+
+    const profileLink =
+        document.getElementById(
+            "customerProfileLink"
+        );
+
+
+    if (!profileLink)
+        return;
+
+
+    try {
+
+        const {
+            data: {
+                user
+            }
+        } =
+            await supabaseClient.auth.getUser();
+
+
+        if (user) {
+
+            profileLink.textContent =
+                "👤 My Account";
+
+            profileLink.href =
+                "customer/account.html";
+
+        } else {
+
+            profileLink.textContent =
+                "👤 Login / Create Account";
+
+            profileLink.href =
+                "customer/login.html";
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Customer profile check:",
+            error
+        );
+
+    }
+
+}
+
+
+updateCustomerProfileLink();
