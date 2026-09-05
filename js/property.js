@@ -62,9 +62,11 @@ async function loadProperty() {
 
                     ${
                         mainImage
-                            ? `<img id="mainPropertyImage"
+                            ? `<img
+                                    id="mainPropertyImage"
                                     src="${escapeHtml(mainImage)}"
-                                    alt="${escapeHtml(p.title)}">`
+                                    alt="${escapeHtml(p.title)}"
+                                >`
                             : `<div class="no-image">
                                     No Image Available
                                </div>`
@@ -202,15 +204,42 @@ async function loadProperty() {
 
                 </div>
 
+
+                <!-- INTEREST MESSAGE -->
+
+                <div
+                    id="interestMessage"
+                    class="interest-message"
+                ></div>
+
+
                 <div class="detail-actions">
+
+                    <!-- I'M INTERESTED -->
+
+                    <button
+                        type="button"
+                        id="interestBtn"
+                        class="btn btn-interest"
+                        data-property-id="${escapeHtml(p.id)}"
+                    >
+                        ❤️ I'm Interested
+                    </button>
+
+
+                    <!-- WHATSAPP -->
 
                     <a
                         class="btn btn-whatsapp"
                         target="_blank"
+                        rel="noopener noreferrer"
                         href="https://wa.me/${GROVER_PROPERTIES.whatsapp}?text=${whatsappMessage}"
                     >
                         💬 Enquire on WhatsApp
                     </a>
+
+
+                    <!-- CALL -->
 
                     <a
                         class="btn btn-primary"
@@ -225,12 +254,246 @@ async function loadProperty() {
 
         </div>
     `;
+
+
+    /*
+     * I'M INTERESTED BUTTON
+     */
+
+    const interestBtn =
+        document.getElementById("interestBtn");
+
+    if (interestBtn) {
+
+        interestBtn.addEventListener(
+            "click",
+            () => handleInterest(p)
+        );
+    }
 }
+
+
+/*
+ * HANDLE CUSTOMER INTEREST
+ */
+
+async function handleInterest(property) {
+
+    const button =
+        document.getElementById("interestBtn");
+
+    const message =
+        document.getElementById("interestMessage");
+
+
+    if (!button || !message)
+        return;
+
+
+    button.disabled = true;
+    button.textContent = "Checking...";
+
+
+    try {
+
+        /*
+         * Check logged-in customer
+         */
+
+        const {
+            data: {
+                user
+            }
+        } =
+            await supabaseClient.auth.getUser();
+
+
+        /*
+         * Customer must login
+         */
+
+        if (!user) {
+
+            message.textContent =
+                "Please login to show your interest in this property.";
+
+            message.className =
+                "interest-message info";
+
+
+            setTimeout(() => {
+
+                window.location.href =
+                    `customer/login.html?redirect=${encodeURIComponent(
+                        window.location.href
+                    )}`;
+
+            }, 700);
+
+            return;
+        }
+
+
+        /*
+         * Customer information
+         */
+
+        const customerName =
+            user.user_metadata?.full_name ||
+            user.user_metadata?.name ||
+            "";
+
+        const customerPhone =
+            user.user_metadata?.phone ||
+            "";
+
+        const customerEmail =
+            user.email ||
+            "";
+
+
+        /*
+         * Check whether interest already exists
+         */
+
+        const {
+            data: existingInterest,
+            error: existingError
+        } =
+            await supabaseClient
+                .from("customer_interests")
+                .select("id, status")
+                .eq("customer_id", user.id)
+                .eq("property_id", property.id)
+                .maybeSingle();
+
+
+        if (existingError) {
+            throw existingError;
+        }
+
+
+        /*
+         * Already interested
+         */
+
+        if (existingInterest) {
+
+            message.textContent =
+                `You have already shown interest in this property. Status: ${existingInterest.status}`;
+
+            message.className =
+                "interest-message success";
+
+            button.textContent =
+                "❤️ Interest Already Submitted";
+
+            button.disabled = true;
+
+            return;
+        }
+
+
+        /*
+         * Save interest
+         */
+
+        button.textContent =
+            "Submitting...";
+
+
+        const {
+            error: insertError
+        } =
+            await supabaseClient
+                .from("customer_interests")
+                .insert({
+
+                    customer_id:
+                        user.id,
+
+                    property_id:
+                        property.id,
+
+                    customer_name:
+                        customerName,
+
+                    customer_phone:
+                        customerPhone,
+
+                    customer_email:
+                        customerEmail,
+
+                    property_title:
+                        property.title,
+
+                    property_location:
+                        property.location,
+
+                    property_price:
+                        property.price,
+
+                    status:
+                        "New"
+                });
+
+
+        if (insertError) {
+            throw insertError;
+        }
+
+
+        /*
+         * Success
+         */
+
+        message.textContent =
+            "Thank you! Your interest has been submitted successfully. Grover Properties will contact you soon.";
+
+        message.className =
+            "interest-message success";
+
+
+        button.textContent =
+            "❤️ Interest Submitted";
+
+        button.disabled = true;
+
+
+    } catch (error) {
+
+        console.error(
+            "Interest submission error:",
+            error
+        );
+
+
+        message.textContent =
+            error.message ||
+            "Unable to submit your interest. Please try again.";
+
+        message.className =
+            "interest-message error";
+
+
+        button.disabled = false;
+
+        button.textContent =
+            "❤️ I'm Interested";
+    }
+}
+
+
+/*
+ * CHANGE MAIN GALLERY IMAGE
+ */
 
 function changeMainImage(src) {
 
     const image =
-        document.getElementById("mainPropertyImage");
+        document.getElementById(
+            "mainPropertyImage"
+        );
 
     if (image)
         image.src = src;
