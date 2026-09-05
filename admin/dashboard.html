@@ -235,6 +235,11 @@
 
             </div>
 
+            <div class="stat-card">
+                <span>Property Interests</span>
+                <strong id="interestLeads">—</strong>
+            </div>
+
 
         </section>
 
@@ -539,6 +544,31 @@
 
         </section>
 
+
+
+        <!-- CUSTOMER PROPERTY INTERESTS -->
+        <section class="admin-card admin-section-gap">
+            <div class="admin-section-header">
+                <div>
+                    <h2>Customer Property Interests</h2>
+                    <p>Customers who have shown interest in your properties.</p>
+                </div>
+            </div>
+            <div class="enquiry-toolbar">
+                <input type="search" id="interestSearch" class="input" placeholder="Search customer, phone, property or location...">
+                <select id="interestStatusFilter" class="select">
+                    <option value="all">All Status</option>
+                    <option>New</option><option>Contacted</option><option>Site Visit Scheduled</option>
+                    <option>Negotiation</option><option>Booked</option><option>Closed</option><option>Not Interested</option>
+                </select>
+            </div>
+            <div class="admin-table-wrapper">
+                <table class="admin-table">
+                    <thead><tr><th>Customer</th><th>Phone</th><th>Email</th><th>Property</th><th>Location</th><th>Price</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+                    <tbody id="interestTable"><tr><td colspan="9">Loading customer interests...</td></tr></tbody>
+                </table>
+            </div>
+        </section>
 
 
         <!-- =================================================
